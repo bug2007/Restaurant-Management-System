@@ -69,11 +69,11 @@ export default function Login() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'end',
-            gap: '16rem'
+            gap: '16vw'
         }}>
             <Carousel />
-            <Box sx={{backgroundColor: 'primary.light', width: '34vw', minHeight: '100vh', py: '4rem', px: '15px'}}>
-                <Box sx={{borderRadius: '10px', boxShadow: '0.5px 10px 12px 2px rgba(0, 0, 0, 0.3)', py: '3rem', px: '3rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px'}}>
+            <Box sx={{backgroundColor: 'primary.light', width: '34vw', minHeight: '100vh', px: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <Box sx={{minWidth: '29vw', minHeight: '572px', borderRadius: '10px', boxShadow: '0.5px 10px 12px 2px rgba(0, 0, 0, 0.3)', py: '50px', px: '45px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px'}}>
                     <img src={logoImg} style={{width: '130px'}} />
                     <Typography
                         variant="h4"
