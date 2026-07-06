@@ -10,7 +10,7 @@ import { carouselContent } from '../util/data.js';
 export default function Carousel() {
     return (
         <>
-        <Box sx={{maxWidth: '650px', px: '3rem', py: '2rem', borderRadius: '10px', boxShadow: '0.5px 10px 12px 2px rgba(0, 0, 0, 0.3)', display: 'flex', alignItems: 'end', backgroundColor: 'primary.light'}}>
+        <Box className='carousel' sx={{display: 'flex', maxWidth: '60%', px: '3rem', alignItems: 'end', backgroundColor: 'primary.light'}}>
             <Swiper
                 modules={[Pagination, A11y, Autoplay]}
                 // spaceBetween={50}

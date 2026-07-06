@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRef, useState } from 'react'
 import { loginAdmin } from '../util/http.js';
 import Carousel from '../components/Carousel.jsx';
-import logoImg from '../assets/chef_green.png'
+import logoImg from '../assets/chef.png'
 
 export default function Login() {
     const navigate = useNavigate();
@@ -46,6 +46,9 @@ export default function Login() {
                 backgroundRepeat: 'no-repeat',
                 backgroundAttachment: 'fixed',
                 minHeight: '100vh',
+                // [theme.breakpoints.up('lg')]: {
+                //     padding: '0 0 0 10rem',
+                // }
                 },
                 
                 '.swiper-pagination-bullet': {
@@ -64,17 +67,16 @@ export default function Login() {
             })} 
         />
 
-        <Box sx={{
+        <Box className='carousel-login-box' sx={{
             minHeight: '100vh',
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'end',
-            gap: '16vw'
+            // alignItems: 'center',
+            // justifyContent: 'end',
+            // gap: '16vw'
         }}>
-            <Carousel />
-            <Box sx={{backgroundColor: 'primary.light', width: '34vw', minHeight: '100vh', px: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <Box sx={{minWidth: '29vw', minHeight: '572px', borderRadius: '10px', boxShadow: '0.5px 10px 12px 2px rgba(0, 0, 0, 0.3)', py: '50px', px: '45px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px'}}>
-                    <img src={logoImg} style={{width: '130px'}} />
+            <Box className='login-form' sx={{pt: '8rem', backgroundColor: 'red', width: '40%', px: '2rem', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'start', gap: '5rem'}}>
+                <Box sx={{textAlign: 'center', backgroundColor: 'blue'}}>
+                    <img src={logoImg} style={{width: '120px', marginBottom: '2rem', backgroundColor: 'red'}} />
                     <Typography
                         variant="h4"
                         sx={(theme) => ({
@@ -82,47 +84,48 @@ export default function Login() {
                             letterSpacing: '2px',
                             color: 'transparent',
                             WebkitTextStroke: `2px ${theme.palette.primary.main}`, 
+                            // textAlign: 'center'
                         })}
                     >
                         BSS RESTAURANT
                     </Typography>
-                    <form onSubmit={handleLogin} style={{width: '100%', marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '20px'}}>
-                        <div>
-                            <InputLabel htmlFor='userName' sx={{fontWeight: '500', fontSize: '20px'}}>Username</InputLabel>
-                            <TextField 
-                                sx={{backgroundColor: 'white', borderRadius: '10px'}} defaultValue={savedUsername} fullWidth id='userName' name='userName' type='email' placeholder='Enter your username' required disabled={isPending || loginSuccess} />
-                        </div>
-                        <div>
-                            <InputLabel htmlFor='password' sx={{fontWeight: '500', fontSize: '20px'}}>Password</InputLabel>
-                            <TextField sx={{backgroundColor: 'white', borderRadius: '10px'}} fullWidth id='password' name='password' type='password' placeholder='Enter your password' required disabled={isPending || loginSuccess} />
-                        </div>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    slotProps={{
-                                        input: { ref: rememberMeRef }
-                                    }}
-                                    defaultChecked={savedUsername ? true : false}
-                                    name="rememberMe"
-                                />
-                            }
-                            label="Remember me"
-                            // sx={{ mb: 2, display: 'block' }}
-                        />
-                        <Button type='submit' sx={{width: '100%', padding: '15px 5px', borderRadius: '5px', color: 'white'}} color='primary' variant='contained' disabled={isPending || loginSuccess}>{isPending ? 'Logging in' : 'LOGIN'}</Button>
-                        {isError && (
-                            <Typography color="error" variant="body2">
-                                {error.message}
-                            </Typography>
-                        )}
-                        {loginSuccess && (
-                            <Typography color="success.main" variant="body2" sx={{ fontWeight: 'bold' }}>
-                                Login successful! Redirecting...
-                            </Typography>
-                        )}
-                    </form>
                 </Box>
+                <form onSubmit={handleLogin} style={{display: 'flex', maxWidth: '90%', width:'100%', flexDirection: 'column', gap: '20px', backgroundColor: 'blue'}}>
+                    <div>
+                        <InputLabel htmlFor='userName' sx={{fontWeight: '500', fontSize: '20px'}}>Username</InputLabel>
+                        <TextField 
+                            sx={{backgroundColor: 'white', borderRadius: '10px'}} defaultValue={savedUsername} fullWidth id='userName' name='userName' type='email' placeholder='Enter your username' required disabled={isPending || loginSuccess} />
+                    </div>
+                    <div>
+                        <InputLabel htmlFor='password' sx={{fontWeight: '500', fontSize: '20px'}}>Password</InputLabel>
+                        <TextField sx={{backgroundColor: 'white', borderRadius: '10px'}} fullWidth id='password' name='password' type='password' placeholder='Enter your password' required disabled={isPending || loginSuccess} />
+                    </div>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                slotProps={{
+                                    input: { ref: rememberMeRef }
+                                }}
+                                defaultChecked={savedUsername ? true : false}
+                                name="rememberMe"
+                            />
+                        }
+                        label="Remember me"
+                    />
+                    <Button type='submit' sx={{padding: '10px 5px', borderRadius: '5px', color: 'white'}} color='primary' variant='contained' disabled={isPending || loginSuccess}>{isPending ? 'Logging in' : 'LOGIN'}</Button>
+                    {isError && (
+                        <Typography color="error" variant="body2">
+                            {error.message}
+                        </Typography>
+                    )}
+                    {loginSuccess && (
+                        <Typography color="success.main" variant="body2" sx={{ fontWeight: 'bold' }}>
+                            Login successful! Redirecting...
+                        </Typography>
+                    )}
+                </form>
             </Box>
+            <Carousel />
         </Box>
         </>
     )

@@ -1,0 +1,19 @@
+/* @media (max-width: 1199px) {
+    div.carousel {
+        display: none;
+    }
+    div.carousel-login-box {
+        justify-content: center;
+    }
+    div.login-panel {
+        background-color: transparent;
+        width: 100%;
+        padding: 0 1.5rem;
+    }
+    div.login-form {
+        min-width: unset;
+        max-width: 560px;
+        width: 100%;
+        background-color: #f7f2ab;
+    }
+} */
