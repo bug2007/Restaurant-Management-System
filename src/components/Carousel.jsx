@@ -10,7 +10,7 @@ import { carouselContent } from '../util/data.js';
 export default function Carousel() {
     return (
         <>
-        <Box className='carousel' sx={{display: 'flex', maxWidth: '60%', px: '3rem', alignItems: 'end', backgroundColor: 'primary.light'}}>
+        <Box className='carousel' sx={{display: 'flex', alignItems: 'center', maxWidth: '55%', px: '3rem', backgroundColor: 'primary.light'}}>
             <Swiper
                 modules={[Pagination, A11y, Autoplay]}
                 // spaceBetween={50}
@@ -23,17 +23,17 @@ export default function Carousel() {
                 autoplay={{
                     delay: 3000, 
                     disableOnInteraction: false, // Keeps autoplay running even after the user drags or clicks a slide manually
-                    pauseOnMouseEnter: true, // Pauses the timer when a user hovers their mouse over the image
+                    // pauseOnMouseEnter: true, // Pauses the timer when a user hovers their mouse over the image
                 }}
                 // scrollbar={{ draggable: true }}
                 onSwiper={(swiper) => console.log(swiper)}
                 onSlideChange={() => console.log('slide change')}
-                style={{paddingBottom: '0.5rem'}}
+                style={{paddingBottom: '8rem'}}
                 >
                 {carouselContent.map((content) => (
                     <SwiperSlide key={content.heading}>
-                        <Box sx={{px: '1rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '15px', textAlign: 'center', maxWidth: '528px', minHeight: '550px' }}>
-                            <img src={content.imgSrc} style={{width: '240px', height: '200px', marginBottom: '15px'}} />
+                        <Box sx={{mx: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '35px', textAlign: 'center', maxWidth: '528px', minHeight: '550px' }}>
+                            <img src={content.imgSrc} style={{marginBottom: '-10px'}} />
                             <Typography sx={{fontSize: '2rem', lineHeight: '120%', fontWeight: 'bold'}}>{content.heading}</Typography>
                             <Typography sx={{fontSize: '20px'}}>{content.text}</Typography>
                         </Box>

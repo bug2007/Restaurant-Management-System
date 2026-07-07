@@ -1,24 +1,21 @@
-import carouselImg2 from '../assets/login_illustration_2.svg'
-import carouselImg3 from '../assets/login_illustration_3.svg'
-import carouselImg4 from '../assets/login_illustration_4.svg'
+import carouselImg1 from '../assets/loginImg1.png'
+import carouselImg2 from '../assets/loginImg2.png'
+import carouselImg3 from '../assets/loginImg3.png'
 
 export const carouselContent = [
     {
+        imgSrc: carouselImg1,
+        heading: 'Welcome Back to BSS Restaurant!',
+        text: "Manage your restaurant with confidence. From employee management to customer orders, everything you need is just a few clicks away."
+    },
+    {
         imgSrc: carouselImg2,
-        heading: 'Welcome Back to BSS Restaurant Dashboard!',
-        text: "Effortlessly manage your restaurant's heartbeat - from employees to every table's orders. Let's make service seamless and delicious together!"
-
+        heading: 'Run Your Restaurant Smarter.',
+        text: "Sign in to access your dashboard, monitor daily operations, and keep your team working efficiently with real-time updates."
     },
     {
         imgSrc: carouselImg3,
-        heading: 'Your Restaurant, Perfectly Managed.',
-        text: "Enter your credentials to access a world of insights that empower your team and delight your guests."
-
-    },
-    {
-        imgSrc: carouselImg4,
-        heading: 'Simplify. Serve. Succeed.',
-        text: "Your all-in-one dashboard to streamline operations, delight customers, and empower your team. Let's create dining experiences worth remembering."
-
+        heading: 'Deliver Great Service Every Day.',
+        text: "Streamline workflows, manage staff and orders, and create exceptional dining experiences with one powerful management platform."
     }
 ]

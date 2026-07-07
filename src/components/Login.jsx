@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { useRef, useState } from 'react'
 import { loginAdmin } from '../util/http.js';
-import Carousel from '../components/Carousel.jsx';
+import Carousel from './Carousel.jsx';
 import logoImg from '../assets/chef.png'
 
 export default function Login() {
@@ -74,31 +74,31 @@ export default function Login() {
             // justifyContent: 'end',
             // gap: '16vw'
         }}>
-            <Box className='login-form' sx={{pt: '8rem', backgroundColor: 'red', width: '40%', px: '2rem', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'start', gap: '5rem'}}>
-                <Box sx={{textAlign: 'center', backgroundColor: 'blue'}}>
-                    <img src={logoImg} style={{width: '120px', marginBottom: '2rem', backgroundColor: 'red'}} />
+            <Box className='login-form' sx={{pt: '8rem', backgroundColor: '#f4f9db', width: '45%', px: '2rem', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'start', gap: '5rem'}}>
+                <Box sx={{minWidth: '80%'}}>
+                    <img src={logoImg} style={{width: '120px', marginBottom: '1.5rem'}} />
                     <Typography
-                        variant="h4"
                         sx={(theme) => ({
-                            fontWeight: 900,
+                            fontWeight: 800,
                             letterSpacing: '2px',
-                            color: 'transparent',
-                            WebkitTextStroke: `2px ${theme.palette.primary.main}`, 
+                            color: 'primary.main',
+                            fontSize: '40px'
+                            // WebkitTextStroke: `2px ${theme.palette.primary.main}`, 
                             // textAlign: 'center'
                         })}
                     >
                         BSS RESTAURANT
                     </Typography>
                 </Box>
-                <form onSubmit={handleLogin} style={{display: 'flex', maxWidth: '90%', width:'100%', flexDirection: 'column', gap: '20px', backgroundColor: 'blue'}}>
+                <form onSubmit={handleLogin} style={{display: 'flex', minWidth: '80%', flexDirection: 'column', gap: '20px'}}>
                     <div>
-                        <InputLabel htmlFor='userName' sx={{fontWeight: '500', fontSize: '20px'}}>Username</InputLabel>
+                        <InputLabel htmlFor='userName' sx={{fontWeight: '500', fontSize: '20px', color: 'black', marginBottom: '5px'}}>Username</InputLabel>
                         <TextField 
-                            sx={{backgroundColor: 'white', borderRadius: '10px'}} defaultValue={savedUsername} fullWidth id='userName' name='userName' type='email' placeholder='Enter your username' required disabled={isPending || loginSuccess} />
+                            sx={{backgroundColor: 'white', borderRadius: '5px', '& .MuiOutlinedInput-root': {'& fieldset': {borderColor: 'primary.main'}, '&:hover fieldset': {borderColor: 'primary.main', borderWidth: '2px'}}}} defaultValue={savedUsername} fullWidth id='userName' name='userName' type='email' placeholder='Enter your username' required disabled={isPending || loginSuccess} />
                     </div>
                     <div>
-                        <InputLabel htmlFor='password' sx={{fontWeight: '500', fontSize: '20px'}}>Password</InputLabel>
-                        <TextField sx={{backgroundColor: 'white', borderRadius: '10px'}} fullWidth id='password' name='password' type='password' placeholder='Enter your password' required disabled={isPending || loginSuccess} />
+                        <InputLabel htmlFor='password' sx={{fontWeight: '500', fontSize: '20px', color: 'black', marginBottom: '5px'}}>Password</InputLabel>
+                        <TextField sx={{backgroundColor: 'white', borderRadius: '5px', '& .MuiOutlinedInput-root': {'& fieldset': {borderColor: 'primary.main'}, '&:hover fieldset': {borderColor: 'primary.main', borderWidth: '2px'}}}} fullWidth id='password' name='password' type='password' placeholder='Enter your password' required disabled={isPending || loginSuccess} />
                     </div>
                     <FormControlLabel
                         control={
@@ -112,7 +112,7 @@ export default function Login() {
                         }
                         label="Remember me"
                     />
-                    <Button type='submit' sx={{padding: '10px 5px', borderRadius: '5px', color: 'white'}} color='primary' variant='contained' disabled={isPending || loginSuccess}>{isPending ? 'Logging in' : 'LOGIN'}</Button>
+                    <Button type='submit' sx={{padding: '10px 5px', borderRadius: '5px', color: 'white', fontSize: '15px'}} color='primary' variant='contained' disabled={isPending || loginSuccess}>{isPending ? 'Logging in' : 'LOGIN'}</Button>
                     {isError && (
                         <Typography color="error" variant="body2">
                             {error.message}
