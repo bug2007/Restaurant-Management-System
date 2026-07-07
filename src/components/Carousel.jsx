@@ -6,11 +6,12 @@ import 'swiper/css';
 import 'swiper/css/pagination';
  
 import { carouselContent } from '../util/data.js';
+import classes from './Login.module.css'
 
-export default function Carousel() {
+export default function Carousel({className}) {
     return (
         <>
-        <Box className='carousel' sx={{display: 'flex', alignItems: 'center', maxWidth: '55%', px: '3rem', backgroundColor: 'primary.light'}}>
+        <Box sx={{display: 'flex', alignItems: 'center', maxWidth: '55%', px: '3rem', backgroundColor: 'primary.light'}} className={className} >
             <Swiper
                 modules={[Pagination, A11y, Autoplay]}
                 // spaceBetween={50}

@@ -1,4 +1,4 @@
-import { GlobalStyles, Box, Slide, Typography, TextField, InputLabel, FormControlLabel, Checkbox, Button } from '@mui/material'
+import { GlobalStyles, Box, Slide, Typography, TextField, InputLabel, FormControlLabel, Checkbox, Button, CircularProgress } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
@@ -6,6 +6,8 @@ import { useRef, useState } from 'react'
 import { loginAdmin } from '../util/http.js';
 import Carousel from './Carousel.jsx';
 import logoImg from '../assets/chef.png'
+import classes from './Login.module.css'
+import ErrorMsg from './ErrorMsg.jsx';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -14,9 +16,10 @@ export default function Login() {
 
     const { mutate, isPending, isError, error } = useMutation({
         mutationFn: loginAdmin,
-        onSuccess: (data, variables) => {
+        onSuccess: (data, variables) => {  // variables: the arguments passed to mutate()
             localStorage.setItem('token', data.token)
             localStorage.setItem('refreshToken', data.refreshToken)
+            localStorage.setItem('fullName', data.user.fullName)
             if (rememberMeRef.current?.checked) {
                 localStorage.setItem('savedUsername', variables.userName)
             } else {
@@ -42,7 +45,7 @@ export default function Login() {
         <GlobalStyles 
             styles={(theme) => ({ 
                 body: { 
-                background: `linear-gradient(to right, ${theme.palette.primary.light}, #dbc764)`,
+                background: theme.palette.primary.light,
                 backgroundRepeat: 'no-repeat',
                 backgroundAttachment: 'fixed',
                 minHeight: '100vh',
@@ -67,22 +70,22 @@ export default function Login() {
             })} 
         />
 
-        <Box className='carousel-login-box' sx={{
+        <Box className={classes.carouselLoginBox} sx={{
             minHeight: '100vh',
             display: 'flex',
             // alignItems: 'center',
             // justifyContent: 'end',
             // gap: '16vw'
         }}>
-            <Box className='login-form' sx={{pt: '8rem', backgroundColor: '#f4f9db', width: '45%', px: '2rem', display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'start', gap: '5rem'}}>
-                <Box sx={{minWidth: '80%'}}>
+            <Box className={classes.loginForm} sx={{pt: '8rem', pb: '2rem', backgroundColor: '#f4f9db', width: '45%', px: '2rem', display: 'flex', alignItems: 'center', flexDirection: 'column', gap: '5rem'}}>
+                <Box sx={{width: '80%', minWidth: '0'}}>
                     <img src={logoImg} style={{width: '120px', marginBottom: '1.5rem'}} />
-                    <Typography
+                    <Typography className={classes.bss}
                         sx={(theme) => ({
                             fontWeight: 800,
                             letterSpacing: '2px',
                             color: 'primary.main',
-                            fontSize: '40px'
+                            fontSize: '40px',
                             // WebkitTextStroke: `2px ${theme.palette.primary.main}`, 
                             // textAlign: 'center'
                         })}
@@ -90,7 +93,7 @@ export default function Login() {
                         BSS RESTAURANT
                     </Typography>
                 </Box>
-                <form onSubmit={handleLogin} style={{display: 'flex', minWidth: '80%', flexDirection: 'column', gap: '20px'}}>
+                <form onSubmit={handleLogin} style={{display: 'flex', width: '80%', flexDirection: 'column', gap: '20px'}}>
                     <div>
                         <InputLabel htmlFor='userName' sx={{fontWeight: '500', fontSize: '20px', color: 'black', marginBottom: '5px'}}>Username</InputLabel>
                         <TextField 
@@ -111,21 +114,18 @@ export default function Login() {
                             />
                         }
                         label="Remember me"
+                        sx={{width: 'fit-content'}}
                     />
-                    <Button type='submit' sx={{padding: '10px 5px', borderRadius: '5px', color: 'white', fontSize: '15px'}} color='primary' variant='contained' disabled={isPending || loginSuccess}>{isPending ? 'Logging in' : 'LOGIN'}</Button>
-                    {isError && (
-                        <Typography color="error" variant="body2">
-                            {error.message}
-                        </Typography>
-                    )}
+                    <Button type='submit' sx={{padding: '10px 5px', borderRadius: '5px', color: 'white', fontSize: '15px', '&.Mui-disabled': { backgroundColor: 'primary.main', color: 'white'}}} color='primary' variant='contained' disabled={isPending || loginSuccess}>{isPending ? <><CircularProgress size="15px" sx={{color: '#f4f9db', marginRight: '10px'}} enableTrackSlot /> LOGGING IN</> : 'LOGIN'}</Button>
+                    {isError && (<ErrorMsg message={error.message} />)}
                     {loginSuccess && (
-                        <Typography color="success.main" variant="body2" sx={{ fontWeight: 'bold' }}>
+                        <Typography color="success" sx={{ fontWeight: 'bold', fontSize: '18px' }}>
                             Login successful! Redirecting...
                         </Typography>
                     )}
                 </form>
             </Box>
-            <Carousel />
+            <Carousel className={classes.carousel} />
         </Box>
         </>
     )
