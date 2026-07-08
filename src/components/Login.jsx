@@ -116,7 +116,7 @@ export default function Login() {
                         label="Remember me"
                         sx={{width: 'fit-content'}}
                     />
-                    <Button type='submit' sx={{padding: '10px 5px', borderRadius: '5px', color: 'white', fontSize: '15px', '&.Mui-disabled': { backgroundColor: 'primary.main', color: 'white'}}} color='primary' variant='contained' disabled={isPending || loginSuccess}>{isPending ? <><CircularProgress size="15px" sx={{color: '#f4f9db', marginRight: '10px'}} enableTrackSlot /> LOGGING IN</> : 'LOGIN'}</Button>
+                    <Button type='submit' sx={{padding: '10px 5px', borderRadius: '5px', color: 'white', fontSize: '15px', '&.Mui-disabled': { backgroundColor: '#e3c942', color: 'white'}}} color='primary' variant='contained' disabled={isPending || loginSuccess}>{isPending ? <><CircularProgress size="15px" sx={{color: '#f4f9db', marginRight: '10px'}} enableTrackSlot /> LOGGING IN</> : 'LOGIN'}</Button>
                     {isError && (<ErrorMsg message={error.message} />)}
                     {loginSuccess && (
                         <Typography color="success" sx={{ fontWeight: 'bold', fontSize: '18px' }}>
