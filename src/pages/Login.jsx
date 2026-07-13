@@ -1,4 +1,4 @@
-import { Box, Slide, Typography, TextField, InputLabel, FormControlLabel, Checkbox, Button, CircularProgress } from '@mui/material'
+import { Box, Slide, Typography, TextField, InputLabel, FormControlLabel, Checkbox, Button, CircularProgress, InputAdornment, FormControl, Input, IconButton, OutlinedInput, FormHelperText } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import loginImg1 from '../assets/login_illustration.png'
@@ -6,10 +6,13 @@ import { useRef, useState } from 'react'
 import { loginAdmin } from '../util/http.js';
 import classes from './Login.module.css'
 import ErrorMsg from '../components/ErrorMsg.jsx';
-
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+ 
 export default function Login() {
     const navigate = useNavigate();
     const [loginSuccess, setLoginSuccess] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
+    const [errors, setErrors] = useState([])
     const rememberMeRef = useRef();
 
     const { mutate, isPending, isError, error } = useMutation({
@@ -30,10 +33,31 @@ export default function Login() {
 
     function handleLogin(event) {
         event.preventDefault()
+        setErrors([])
         const formData = new FormData(event.target)
         const userName = formData.get('userName')
         const password = formData.get('password')
+
+        const isUsernameEmpty = !userName || userName.trim() === '';
+        const isPasswordEmpty = !password || password.trim() === '';
+
+        if (isUsernameEmpty && isPasswordEmpty) {
+            setErrors(['userName', 'password'])
+            return
+        }
+        else if (isUsernameEmpty) {
+            setErrors(['userName'])
+            return
+        }
+        else if (isPasswordEmpty) {
+            setErrors(['password'])
+            return
+        }
         mutate({userName, password})
+    }
+
+    function handleClickShowPassword() {
+        setShowPassword((show) => !show)
     }
 
     const savedUsername = localStorage.getItem('savedUsername') || '';
@@ -50,7 +74,7 @@ export default function Login() {
                 sx={{
                     pt: '8rem', pb: '2rem', 
                     backgroundColor: '#ffffff', 
-                    width: '45%', 
+                    width: '50%', 
                     px: '2rem', 
                     display: 'flex', 
                     alignItems: 'center', 
@@ -63,53 +87,44 @@ export default function Login() {
                         width: '80%', 
                         flexDirection: 'column', 
                         gap: '25px',
-                        marginTop: '4rem'}}>
+                        }}>
                     <Typography sx={{fontSize: '32px', marginBottom: '4rem'}}>BSS Restaurant</Typography>
+                    
                     <div>
-                        <InputLabel 
-                            htmlFor='userName' 
-                            sx={{
-                                fontWeight: '500', 
-                                fontSize: '20px', 
-                                color: 'black', 
-                                marginBottom: '5px'}}>
-                            Username
-                        </InputLabel>
-                        <TextField 
-                            sx={{
-                                backgroundColor: 'white', 
-                                borderRadius: '5px', 
-                                '& .MuiOutlinedInput-root': { borderColor: 'white', '&:hover fieldset': {borderColor: '#696767'}}}} 
-                                defaultValue={savedUsername} 
-                                fullWidth 
-                                id='userName' 
-                                name='userName' 
-                                type='email' 
-                                placeholder='Enter your username' 
-                                required disabled={isPending || loginSuccess} />
+                        <InputLabel htmlFor='userName' sx={{fontSize: '20px', color: 'black', marginBottom: '5px'}}>Username</InputLabel>
+                        <OutlinedInput
+                            error={errors.includes('userName')}
+                            id='userName'
+                            name='userName'
+                            fullWidth
+                            placeholder='Enter your username'
+                            disabled={isPending || loginSuccess}
+                            defaultValue='admin@mail.com'
+                        ></OutlinedInput>
+                        {errors.includes('userName') && <FormHelperText error sx={{fontSize: '15px'}}>Please fill out this field.</FormHelperText>}
                     </div>
+
                     <div>
-                        <InputLabel 
-                        htmlFor='password' 
-                        sx={{
-                            fontWeight: '500', 
-                            fontSize: '20px', 
-                            color: 'black', 
-                            marginBottom: '5px'}}>
-                            Password
-                        </InputLabel>
-                        <TextField 
-                        sx={{
-                            backgroundColor: 'white', 
-                            borderRadius: '5px', 
-                            '& .MuiOutlinedInput-root': {'& fieldset': {borderColor: 'primary.main'}, '&:hover fieldset': {borderColor: 'primary.main', borderWidth: '2px'}}}} 
-                            fullWidth 
-                            id='password' 
-                            name='password' 
-                            type='password' 
-                            placeholder='Enter your password' 
-                            required disabled={isPending || loginSuccess} />
+                        <InputLabel htmlFor='password' sx={{fontSize: '20px', color: 'black', marginBottom: '5px'}}>Password</InputLabel>
+                        <OutlinedInput
+                            error={errors.includes('password')}
+                            id='password'
+                            fullWidth
+                            type={showPassword ? 'text' : 'password'}
+                            name='password'
+                            placeholder='Enter your password'
+                            defaultValue='Admin@123'
+                            sx={{'& input::-ms-reveal': {display: 'none'}}}
+                            endAdornment={<InputAdornment position='end'>
+                                        <IconButton onClick={handleClickShowPassword} edge='end'>
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>}
+                            >
+                        </OutlinedInput>
+                        {errors.includes('password') && <FormHelperText error sx={{fontSize: '15px'}}>Please fill out this field.</FormHelperText>}
                     </div>
+
                     <FormControlLabel
                         control={
                             <Checkbox
@@ -129,7 +144,7 @@ export default function Login() {
                             borderRadius: '5px', 
                             color: 'white', 
                             fontSize: '15px', 
-                            '&.Mui-disabled': { backgroundColor: '#e3c942', color: 'white'}}} 
+                            '&.Mui-disabled': { backgroundColor: '#f29641', color: 'white'}}} 
                             color='primary' 
                             variant='contained' 
                             disabled={isPending || loginSuccess}>{isPending ? <><CircularProgress size="15px" sx={{color: '#f4f9db', marginRight: '10px'}} enableTrackSlot /> LOGGING IN</> : 'LOGIN'}</Button>
@@ -147,7 +162,7 @@ export default function Login() {
             </Box>
             <Box 
                 sx={{
-                    width: '55%',
+                    width: '50%',
                     background: `url(${loginImg1}) center / cover no-repeat`
             }}></Box>
         </Box>
