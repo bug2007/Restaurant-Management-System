@@ -257,7 +257,7 @@ export default function AppNavigation() {
           )})}
         </List>        
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, minHeight: '100vh', bgcolor: 'rgb(250, 248, 248)' }}>
         <DrawerHeader />
         <Outlet context={setTitle} />
       </Box>

@@ -1,5 +1,3 @@
-// import * as React from 'react';
-// import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -24,6 +22,14 @@ import { visuallyHidden } from '@mui/utils';
 import { useState, useMemo } from 'react';
 import noProfileImg from '../assets/noPfp.png'
 
+function formatDate(date) {
+  return new Date(date).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
 function descendingComparator(a, b, orderBy) {  
   const valA = (a.user[orderBy] || a[orderBy] || "").toString().toLowerCase()    // e.g a[orderBy] cud mean row['phoneNumber']
   const valB = (b.user[orderBy] || b[orderBy] || "").toString().toLowerCase();
@@ -46,33 +52,27 @@ function getComparator(order, orderBy) {
 const headCells = [
   {
     id: 'fullName',
-    // numeric: false,
-    // disablePadding: true,
-    label: 'Name',
+    label: 'Employee',
   },
   {
     id: 'email',
-    // numeric: true,
-    // disablePadding: false,
     label: 'Email',
   },
   {
     id: 'designation',
-    // numeric: true,
-    // disablePadding: false,
     label: 'Designation',
   },
   {
     id: 'joinDate',
-    // numeric: true,
-    // disablePadding: false,
     label: 'Join Date',
   },
   {
     id: 'phoneNumber',
-    // numeric: true,
-    // disablePadding: false,
     label: 'Phone',
+  },
+  {
+    id: 'actions',
+    label: 'Actions',
   },
 ];
 
@@ -89,8 +89,6 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            // align={headCell.numeric ? 'right' : 'left'}
-            // padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}  // for screen readers
           >
             <TableSortLabel
@@ -112,65 +110,12 @@ function EnhancedTableHead(props) {
   );
 }
 
-// function EnhancedTableToolbar(props) {
-//   const { numSelected } = props;
-//   return (
-//     <Toolbar
-//       sx={[
-//         {
-//           pl: { sm: 2 },
-//           pr: { xs: 1, sm: 1 },
-//         },
-//         numSelected > 0 && {
-//           bgcolor: (theme) =>
-//             alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-//         },
-//       ]}
-//     >
-//       {numSelected > 0 ? (
-//         <Typography
-//           variant="subtitle1"
-//           component="div"
-//           sx={{
-//             color: 'inherit',
-//             flex: '1 1 100%',
-//           }}
-//         >
-//           {numSelected} selected
-//         </Typography>
-//       ) : (
-//         <Typography
-//           sx={{ flex: '1 1 100%' }}
-//           variant="h6"
-//           id="tableTitle"
-//           component="div"
-//         >
-//           Nutrition
-//         </Typography>
-//       )}
-//       {numSelected > 0 ? (
-//         <Tooltip title="Delete">
-//           <IconButton>
-//             <DeleteIcon />
-//           </IconButton>
-//         </Tooltip>
-//       ) : (
-//         <Tooltip title="Filter list">
-//           <IconButton>
-//             <FilterListIcon />
-//           </IconButton>
-//         </Tooltip>
-//       )}
-//     </Toolbar>
-//   );
-// }
+
 
 export default function EnhancedTable({rows}) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
-//   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-//   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleRequestSort = (event, property) => {
@@ -178,34 +123,6 @@ export default function EnhancedTable({rows}) {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-
-//   const handleSelectAllClick = (event) => {
-//     if (event.target.checked) {
-//       const newSelected = rows.map((n) => n.id);
-//       setSelected(newSelected);
-//       return;
-//     }
-//     setSelected([]);
-//   };
-
-//   const handleClick = (event, id) => {
-//     const selectedIndex = selected.indexOf(id);
-//     let newSelected = [];
-
-//     if (selectedIndex === -1) {
-//       newSelected = newSelected.concat(selected, id);
-//     } else if (selectedIndex === 0) {
-//       newSelected = newSelected.concat(selected.slice(1));
-//     } else if (selectedIndex === selected.length - 1) {
-//       newSelected = newSelected.concat(selected.slice(0, -1));
-//     } else if (selectedIndex > 0) {
-//       newSelected = newSelected.concat(
-//         selected.slice(0, selectedIndex),
-//         selected.slice(selectedIndex + 1),
-//       );
-//     }
-//     setSelected(newSelected);
-//   };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -230,8 +147,7 @@ export default function EnhancedTable({rows}) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+      <Paper sx={{ width: '100%', mb: 2, borderRadius: 3, overflow: 'hidden'}} elevation={4}>
         <TableContainer sx={{
             maxHeight: 530,
             '&::-webkit-scrollbar': { display: 'none' },
@@ -239,39 +155,45 @@ export default function EnhancedTable({rows}) {
             msOverflowStyle: 'none'}}>
           <Table
             stickyHeader
-            sx={{ minWidth: 750 }}
+            sx={{ 
+              minWidth: 750,
+              '& .MuiTableCell-root': {
+                height: 80,
+                fontSize: '18px',
+                px: 4
+              },
+              '& .MuiTableHead-root .MuiTableCell-root': {
+                color: (theme) => theme.palette.primary.main,
+                '& .MuiTableSortLabel-root': {
+                  color: (theme) => theme.palette.primary.main,
+                  '& .MuiTableSortLabel-icon': {
+                    fontSize: '18px'
+                  },
+                },
+              }
+            }}
             aria-labelledby="tableTitle"
-            // size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
-            //   numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-            //   onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-            //   rowCount={rows.length}
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                // const isItemSelected = selected.includes(row.id);
-                // const labelId = `enhanced-table-checkbox-${index}`;
-
                 return (
                   <TableRow
                     hover
-                    // onClick={(event) => handleClick(event, row.id)}
-                    // role="checkbox"
-                    // aria-checked={isItemSelected}
-                    // tabIndex={-1}
+                    sx={{
+                      '&:hover .MuiTableCell-root': {
+                        bgcolor: (theme) => alpha(theme.palette.primary.main, 0.15),
+                      }
+                    }}
                     key={row.id}
-                    // selected={isItemSelected}
-                    // sx={{ cursor: 'pointer' }}
                   >
                     <TableCell sx={{display: 'flex', alignItems: 'center', gap: '15px'}}
                       component="th"
-                    //   id={labelId}
                       scope="row"
-                    //   padding="none"
                     >  
                       <img 
                         src={`https://bssrms.runasp.net/images/user/${row.user.image}`} 
@@ -281,7 +203,7 @@ export default function EnhancedTable({rows}) {
                     </TableCell>
                     <TableCell>{row.user.email}</TableCell>
                     <TableCell>{row.designation}</TableCell>
-                    <TableCell>{row.joinDate}</TableCell>
+                    <TableCell>{formatDate(row.joinDate)}</TableCell>
                     <TableCell>{row.user.phoneNumber}</TableCell>
                   </TableRow>
                 );
@@ -289,7 +211,7 @@ export default function EnhancedTable({rows}) {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: (53) * emptyRows,
                   }}
                 >
                   <TableCell colSpan={5} />
