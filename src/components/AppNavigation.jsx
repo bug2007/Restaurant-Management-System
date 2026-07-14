@@ -22,18 +22,18 @@ import { Outlet } from 'react-router-dom';
 import { useState } from 'react';
 
 import { NavLink } from 'react-router-dom';
-import PeopleIcon from '@mui/icons-material/People';
-import TableBarIcon from '@mui/icons-material/TableBar';
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import TableBarOutlinedIcon from '@mui/icons-material/TableBarOutlined';
+import RestaurantOutlinedIcon from '@mui/icons-material/RestaurantOutlined';
+import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 
 const navItems = [
-  { text: 'Employees', icon: <PeopleIcon />, path: '/employees' },
-  { text: 'Tables', icon: <TableBarIcon />, path: '/tables' },
-  { text: 'Foods', icon: <RestaurantMenuIcon />, path: '/foods' },
-  { text: 'New Order', icon: <AddShoppingCartIcon />, path: '/new-order' },
-  { text: 'Orders', icon: <ReceiptLongIcon />, path: '/orders' },
+  { text: 'Employees', icon: <PeopleAltOutlinedIcon />, path: '/employees' },
+  { text: 'Tables', icon: <TableBarOutlinedIcon />, path: '/tables' },
+  { text: 'Foods', icon: <RestaurantOutlinedIcon />, path: '/foods' },
+  { text: 'New Order', icon: <AddShoppingCartOutlinedIcon />, path: '/new-order' },
+  { text: 'Orders', icon: <ReceiptLongOutlinedIcon />, path: '/orders' },
 ];
 
 const drawerWidth = 240;
@@ -55,7 +55,7 @@ const closedMixin = (theme) => ({
   overflowX: 'hidden',
 //   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
+    width: `calc(${theme.spacing(10)} + 1px)`,
   },
 });
 
@@ -72,7 +72,7 @@ const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme }) => {
 
-  const miniDrawerWidth = `calc(${theme.spacing(8)} + 1px)`;
+  const miniDrawerWidth = `calc(${theme.spacing(10)} + 1px)`;
   
   return {
       zIndex: theme.zIndex.drawer + 1,
@@ -174,7 +174,7 @@ export default function AppNavigation() {
           </IconButton>}
         </DrawerHeader>
         <Divider />
-        <List sx={{px: open ? 1 : 0}}>
+        <List sx={{px: 1, bgcolor: 'primary.main', color: 'rgba(255, 255, 255, 0.6)'}}>
           {navItems.map((navItem) => (
             <ListItem key={navItem.text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
@@ -186,11 +186,8 @@ export default function AppNavigation() {
                     px: 2.5,
                     borderRadius: 2,
                     '&.active':{
-                        bgcolor: 'rgba(225, 112, 6, 0.2)',
-                        color: 'primary.main',
-                        '& .MuiListItemIcon-root': {
-                            color: 'primary.main'
-                        }
+                        bgcolor: 'rgba(225, 112, 6, 0.5)',
+                        color: 'white',
                     }
                   },
                   open
@@ -207,6 +204,10 @@ export default function AppNavigation() {
                     {
                       minWidth: 0,
                       justifyContent: 'center',
+                      color: 'inherit',
+                      '& svg': { 
+                        fill: 'currentColor',
+                      }
                     },
                     open
                       ? {
