@@ -1,5 +1,5 @@
 // import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled, useTheme, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -20,6 +20,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { Outlet } from 'react-router-dom';
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { NavLink } from 'react-router-dom';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
@@ -28,12 +29,18 @@ import RestaurantOutlinedIcon from '@mui/icons-material/RestaurantOutlined';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import TableBarIcon from '@mui/icons-material/TableBar';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+
 const navItems = [
-  { text: 'Employees', icon: <PeopleAltOutlinedIcon />, path: '/employees' },
-  { text: 'Tables', icon: <TableBarOutlinedIcon />, path: '/tables' },
-  { text: 'Foods', icon: <RestaurantOutlinedIcon />, path: '/foods' },
-  { text: 'New Order', icon: <AddShoppingCartOutlinedIcon />, path: '/new-order' },
-  { text: 'Orders', icon: <ReceiptLongOutlinedIcon />, path: '/orders' },
+  { text: 'Employees', icon: <PeopleAltOutlinedIcon />, activeIcon: <PeopleAltIcon />, path: '/employees' },
+  { text: 'Tables', icon: <TableBarOutlinedIcon />, activeIcon: <TableBarIcon />, path: '/tables' },
+  { text: 'Foods', icon: <RestaurantOutlinedIcon />, activeIcon: <RestaurantIcon />, path: '/foods' },
+  { text: 'New Order', icon: <AddShoppingCartOutlinedIcon />, activeIcon: <AddShoppingCartIcon />, path: '/new-order' },
+  { text: 'Orders', icon: <ReceiptLongOutlinedIcon />, activeIcon: <ReceiptLongIcon />, path: '/orders' },
 ];
 
 const drawerWidth = 240;
@@ -105,6 +112,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
+    '& .MuiDrawer-paper': {
+      borderRight: 'none',
+    },
     variants: [
       {
         props: ({ open }) => open,
@@ -162,10 +172,16 @@ export default function AppNavigation() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
+      <Drawer variant="permanent" open={open} 
+        sx={{
+          '& .MuiDrawer-paper': {
+            bgcolor: 'primary.main',
+          },
+        }}
+      >
+        <DrawerHeader sx={{bgcolor: '#f78113'}}>
             {open && ( 
-            <Typography sx={{ fontWeight: 'bold', color: 'primary.main', pl: 2, fontSize: '18px' }}>
+            <Typography sx={{ fontWeight: 'bold', pl: 2, fontSize: '18px', color: 'white' }}>
                 BSS RESTAURANT
             </Typography>
             )}
@@ -173,9 +189,11 @@ export default function AppNavigation() {
             <ChevronLeftIcon />
           </IconButton>}
         </DrawerHeader>
-        <Divider />
-        <List sx={{px: 1, bgcolor: 'primary.main', color: 'rgba(255, 255, 255, 0.6)'}}>
-          {navItems.map((navItem) => (
+        {/* <Divider /> */}
+        <List sx={{px: 1, pt: 3, color: 'rgba(255, 255, 255, 0.8)'}}>
+          {navItems.map((navItem) => {
+            const isActive = location.pathname === `/dashboard${navItem.path}`;
+            return (
             <ListItem key={navItem.text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 component={NavLink}
@@ -183,10 +201,10 @@ export default function AppNavigation() {
                 sx={[
                   {
                     minHeight: 48,
-                    px: 2.5,
+                    px: !open ? 2.5 : undefined,
                     borderRadius: 2,
-                    '&.active':{
-                        bgcolor: 'rgba(225, 112, 6, 0.5)',
+                    '&&.active':{
+                        bgcolor: (theme) => alpha('#fff', 0.2),
                         color: 'white',
                     }
                   },
@@ -199,33 +217,30 @@ export default function AppNavigation() {
                       },
                 ]}
               >
-                <ListItemIcon
-                  sx={[
-                    {
-                      minWidth: 0,
-                      justifyContent: 'center',
-                      color: 'inherit',
-                      '& svg': { 
-                        fill: 'currentColor',
-                      }
-                    },
-                    open
-                      ? {
-                          mr: 3,
-                        }
-                      : {
-                          mr: 'auto',
-                        },
-                  ]}
-                >
-                  {navItem.icon}
+              
+                  <ListItemIcon
+                    sx={[
+                      {
+                        minWidth: 0,
+                        justifyContent: 'center',
+                        color: 'inherit',
+                      },
+                      open
+                        ? {
+                            mr: 3,
+                          }
+                        : {
+                            mr: 'auto',
+                          },
+                    ]}
+                  >
+                  {isActive ? navItem.activeIcon : navItem.icon}
                 </ListItemIcon>
                 <ListItemText
                   primary={navItem.text}
                   sx={[
                     {
                       '& .MuiListItemText-primary': {
-                        fontWeight: 'bold',
                       }
                     },
                     open
@@ -239,7 +254,7 @@ export default function AppNavigation() {
                 />
               </ListItemButton>
             </ListItem>
-          ))}
+          )})}
         </List>        
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
