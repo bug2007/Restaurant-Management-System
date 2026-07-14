@@ -26,8 +26,15 @@ export default function Employees() {
     if (isPending) {
         return <div>Loading employees data...</div>;
     }
+
+    const end = data.total % 5 === 0 ? data.total : data.total + 5
+    
+    let rowsPerPageOptions = []
+    for (let i=5; i<=end; i+=5) {
+        rowsPerPageOptions.push(i)
+    }
     
     return (
-        <EnhancedTable rows={data.data} />
+        <EnhancedTable rows={data.data} rowsPerPageOptions={rowsPerPageOptions} />
     )
-}
+} 

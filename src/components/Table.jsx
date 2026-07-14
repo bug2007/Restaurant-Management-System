@@ -89,7 +89,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            sortDirection={orderBy === headCell.id ? order : false}  // for screen readers
+            // sortDirection={orderBy === headCell.id ? order : false}  // for screen readers
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -112,11 +112,11 @@ function EnhancedTableHead(props) {
 
 
 
-export default function EnhancedTable({rows}) {
+export default function EnhancedTable({rows, rowsPerPageOptions}) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('name');
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[rowsPerPageOptions.length - 1]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -149,7 +149,7 @@ export default function EnhancedTable({rows}) {
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2, borderRadius: 3, overflow: 'hidden'}} elevation={4}>
         <TableContainer sx={{
-            maxHeight: 530,
+            maxHeight: '75vh',
             '&::-webkit-scrollbar': { display: 'none' },
             scrollbarWidth: 'none',
             msOverflowStyle: 'none'}}>
@@ -221,7 +221,7 @@ export default function EnhancedTable({rows}) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 20]}
+          rowsPerPageOptions={rowsPerPageOptions}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
