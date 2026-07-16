@@ -9,9 +9,13 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
+import { IconButton, Tooltip } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import { useState } from 'react';
 import noProfileImg from '../assets/noPfp.png'
+import CircularProgress from '@mui/material/CircularProgress';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 function formatDate(date) {
   return new Date(date).toLocaleDateString('en-US', {
@@ -80,6 +84,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
+            sx={{width: headCell.id === 'actions' ? '10%' : '18%'}}
             // sortDirection={orderBy === headCell.id ? order : false}  // for screen readers
           >
             {headCell.id !== 'actions' && headCell.id !== 'fullName' && headCell.id !== 'phoneNumber' ? (
@@ -108,9 +113,7 @@ function EnhancedTableHead(props) {
   );
 }
 
-
-
-export default function EnhancedTable({rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange}) {
+export default function EnhancedTable({rows, total, currentPage, rowsPerPage, rowsPerPageOptions, onPageChange, onRowsPerPageChange, sort, onSortChange, isPending}) {
 
   const handleRequestSort = (event, property) => {
     const [currentField, currentOrder] = sort.split(' ');
@@ -133,16 +136,32 @@ export default function EnhancedTable({rows, total, currentPage, rowsPerPage, ro
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', position: 'relative' }}>
+      {isPending && (
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            bgcolor: 'rgba(255, 255, 255, 0.6)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 5,
+            pointerEvents: 'auto'
+          }}
+          ><CircularProgress />
+        </Box>
+      )}
       <Paper sx={{ width: '100%', mb: 2, borderRadius: 3, overflow: 'hidden'}} elevation={4}>
         <TableContainer sx={{
-            height: '75vh',
+            height: isPending ? '25vh' : '75vh',
             '&::-webkit-scrollbar': { display: 'none' },
             scrollbarWidth: 'none',
             msOverflowStyle: 'none'}}>
           <Table
             stickyHeader
             sx={{ 
+              tableLayout: 'fixed', // to make widths stick
               minWidth: 750,
               '& .MuiTableCell-root': {
                 height: 80,
@@ -173,7 +192,7 @@ export default function EnhancedTable({rows, total, currentPage, rowsPerPage, ro
                     hover
                     sx={{
                       '&:hover .MuiTableCell-root': {
-                        bgcolor: (theme) => alpha(theme.palette.primary.main, 0.15),
+                        bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
                       }
                     }}
                     key={row.id}
@@ -186,19 +205,63 @@ export default function EnhancedTable({rows, total, currentPage, rowsPerPage, ro
                         src={`https://bssrms.runasp.net/images/user/${row.user.image}`} 
                         style={{width: '35px', height: '35px', borderRadius: '50%', objectFit: 'cover'}}
                         onError={(e) => {e.target.src = noProfileImg, e.target.onerror=null}} />
-                      {row.user.fullName}
+                      <Box sx={{}}>
+                        <Tooltip title={row.user.fullName} arrow placement='top-start'>
+                        <Box sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {row.user.fullName}
+                        </Box>
+                        </Tooltip>
+                      </Box>
                     </TableCell>
-                    <TableCell>{row.user.email}</TableCell>
-                    <TableCell>{row.designation}</TableCell>
-                    <TableCell>{formatDate(row.joinDate)}</TableCell>
-                    <TableCell>{row.user.phoneNumber}</TableCell>
+
+                    <TableCell>
+                      <Tooltip title={row.user.email} arrow placement='top-start'>
+                        <Box sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {row.user.email}
+                        </Box>
+                      </Tooltip>
+                    </TableCell>
+
+                    <TableCell>
+                      <Tooltip title={row.designation} arrow placement='top-start'>
+                        <Box sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {row.designation}
+                        </Box>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell>
+                      <Tooltip title={formatDate(row.joinDate)} arrow placement='top-start'>
+                        <Box sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {formatDate(row.joinDate)}
+                        </Box>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell>
+                      <Tooltip title={row.user.phoneNumber} arrow placement='top-start'>
+                        <Box sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {row.user.phoneNumber}
+                        </Box>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell>
+                      <Tooltip title='Edit' placement='top-start'>
+                        <IconButton sx={{'&:hover': {color: 'primary.main', scale: 1.2, transition: 'all 0.3s ease-in-out'}}}>
+                          <EditOutlinedIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title='Delete' placement='top-start'>
+                        <IconButton sx={{marginLeft: 2, '&:hover': {color: 'red', scale: 1.2, transition: 'all 0.3s ease-in-out'}}}>
+                          <DeleteOutlinedIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
                   </TableRow>
                 );
               })}
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
+        {!isPending && <TablePagination
           component="div"
           count={total}
           page={currentPage - 1}
@@ -206,7 +269,7 @@ export default function EnhancedTable({rows, total, currentPage, rowsPerPage, ro
           rowsPerPageOptions={rowsPerPageOptions}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        />}
       </Paper>
     </Box>
   );

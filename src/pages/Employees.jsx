@@ -15,11 +15,8 @@ export default function Employees() {
         queryFn: ({signal, queryKey}) => getEmployees({signal, page, perPage, sort}) 
     })
 
-    if (isPending) return <div>Loading employees data...</div>;
-    
-    if (isError) return <div>{error.message}</div>;
-
-    const end = data.total % 5 === 0 ? data.total : data.total + 5
+    const total = data?.total || 0;
+    const end = total % 5 === 0 ? total : total + 5;
     
     let rowsPerPageOptions = []
     for (let i=5; i<=end; i+=5) {
@@ -28,10 +25,11 @@ export default function Employees() {
     
     return (
         <EnhancedTable 
-            rows={data.data} 
-            total={data.total}
-            currentPage={data.current_page}
-            rowsPerPage={data.per_page}
+            isPending={isPending}
+            rows={data?.data || []} 
+            total={total}
+            currentPage={data?.current_page || 1}
+            rowsPerPage={data?.per_page || 0}
             rowsPerPageOptions={rowsPerPageOptions}
             onPageChange={setPage}
             onRowsPerPageChange={(value) => {
